@@ -1,4 +1,4 @@
-var sdkToken = "WHITEcGFydG5lcl9pZD1DYzlFNTJhTVFhUU5TYmlHNWJjbkpmVThTNGlNVXlJVUNwdFAmc2lnPTE3Y2ZiYzg0ZGM5N2FkNDAxZmY1MTM0ODMxYTdhZTE2ZGQ3MTdmZjI6YWRtaW5JZD00JnJvbGU9bWluaSZleHBpcmVfdGltZT0xNTY2MDQwNjk4JmFrPUNjOUU1MmFNUWFRTlNiaUc1YmNuSmZVOFM0aU1VeUlVQ3B0UCZjcmVhdGVfdGltZT0xNTM0NDgzNzQ2Jm5vbmNlPTE1MzQ0ODM3NDYzMzYwMA";
+var sdkToken = "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTE1ZjQyMTIxMWViMjQzMjhmODQ4MTU0OTU0NTE4NjJlYTU2NzFkYjc6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTQ5ODA4NzcmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NjM0MjM5MjUmbm9uY2U9MTU2MzQyMzkyNTA5NjAw";
 var url = 'https://cloudcapiv4.herewhite.com/room?token=' + sdkToken;
 var requestInit = {
     method: 'POST',
@@ -10,7 +10,7 @@ var requestInit = {
         limit: 100, // 房间人数限制
     }),
 };
-
+var roomObj;
 // 请求创建房间
 // 网络请求部分逻辑，请在服务器实现
 fetch(url, requestInit).then(function(response) {
@@ -24,10 +24,13 @@ fetch(url, requestInit).then(function(response) {
     return test;
 }).then(function(room) {
     // Step3: 加入成功后想白板绑定到指定的 dom 中
-    alert(1);
+    roomObj = room;
+    room.setMemberState({
+        currentApplianceName: "rectangle",
+    });
+
     bind(room);
 }).catch(function(err) {
-    alert(2);
     console.log(err);
 });
 // 加入房间
@@ -44,8 +47,6 @@ function jionRoom (json) {
             // 使用该 API 后，服务器截屏时，会使用原始图片地址
             urlInterrupter: url => url,
         });
-        console.log(json.msg.room.uuid);
-        console.log(json.msg.roomToken);
         return whiteWebSdk.joinRoom({
             // 这里与
             uuid: json.msg.room.uuid,
