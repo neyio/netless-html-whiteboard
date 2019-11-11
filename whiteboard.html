@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Netless</title>
+    <link rel="stylesheet" href="whiteboard.css">
+</head>
+<body>
+<div id="netless-whiteboard" class="whiteboard-box">
+</div>
+<script src="https://sdk.herewhite.com/fast-sdk/index.js"></script>
+<script src="https://cdn.agora.io/sdk/release/AgoraRTCSDK-2.9.0.js"></script>
+<script>
+    function getQueryVariable(variable)
+    {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i=0;i<vars.length;i++) {
+            let pair = vars[i].split("=");
+            if(pair[0] === variable){return pair[1];}
+        }
+        return(false);
+    }
+    let netlessRoom;
+    let sdkToken = "WHITEcGFydG5lcl9pZD0zZHlaZ1BwWUtwWVN2VDVmNGQ4UGI2M2djVGhncENIOXBBeTcmc2lnPTc1MTBkOWEwNzM1ZjA2MDYwMTMzODBkYjVlNTQ2NDA0OTAzOWU2NjE6YWRtaW5JZD0xNTgmcm9sZT1taW5pJmV4cGlyZV90aW1lPTE1OTAwNzM1NjEmYWs9M2R5WmdQcFlLcFlTdlQ1ZjRkOFBiNjNnY1RoZ3BDSDlwQXk3JmNyZWF0ZV90aW1lPTE1NTg1MTY2MDkmbm9uY2U9MTU1ODUxNjYwODYxNzAw";
+    let url = 'https://cloudcapiv4.herewhite.com/room?token=' + sdkToken;
+    let requestInit = {
+        method: 'POST',
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            name: '我的第一个 White 房间',
+            limit: 100, // 房间人数限制
+        }),
+    };
+    let identity = getQueryVariable("identity");
+    let classRoomName = getQueryVariable("classRoomName");
+    let userId;
+    if (getQueryVariable("userId")) {
+        userId = getQueryVariable("userId");
+    } else {
+        userId = `${Math.floor(Math.random() * 100000)}`;
+    }
+    var state = {title:'',url: window.location.href};
+    if (getQueryVariable("uuid")) {
+        let uuid = getQueryVariable("uuid");
+        if (classRoomName) {
+            history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${uuid}&userId=${userId}`);
+        } else {
+            history.pushState(state,'',`whiteboard?identity=host&uuid=${uuid}&userId=${userId}`);
+        }
+        let url2 = 'https://cloudcapiv4.herewhite.com/room/join?token=' + sdkToken + '&uuid=' + uuid;
+        let requestInit2 = {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+            },
+        };
+        fetch(url2, requestInit2).then(function(response) {
+            return response.json();
+        }).then(function(json) {
+            netlessRoom = window.WhiteFastSDK.Room("netless-whiteboard",{
+                uuid: uuid,
+                roomToken: json.msg.roomToken,
+                userId: userId,
+                identity: identity,
+                logoUrl: "https://white-sdk.oss-cn-beijing.aliyuncs.com/video/netless_black2.svg",
+                rtc: {
+                    type: "agora",
+                    rtcObj: window.AgoraRTC,
+                    token: "8595fd46955f427db44b4e9ba90f015d",
+                },
+                replayCallback: () => {
+                },
+                exitRoomCallback: () => {
+                    window.location.href = "/";
+                },
+                recordDataCallback: () => {
+                },
+            });
+        }).catch(function(err) {
+            console.log(err);
+        });
+    } else {
+        fetch(url, requestInit).then(function(response) {
+            // Step1: 服务器返回房间唯一标识 uuid 和 进入房间的秘钥 roomToken
+            return response.json();
+        }).then(function(json) {
+            if (classRoomName) {
+                history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
+            } else {
+                history.pushState(state,'',`whiteboard?identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
+            }
+            netlessRoom = window.WhiteFastSDK.Room("netless-whiteboard",{
+                uuid: json.msg.room.uuid,
+                roomToken: json.msg.roomToken,
+                userId: userId,
+                identity: identity,
+                roomName: classRoomName,
+                logoUrl: "https://white-sdk.oss-cn-beijing.aliyuncs.com/video/netless_black2.svg",
+                rtc: {
+                    type: "agora",
+                    rtcObj: AgoraRTC,
+                    token: "8595fd46955f427db44b4e9ba90f015d",
+                },
+                replayCallback: () => {
+                },
+                exitRoomCallback: () => {
+                    window.location.href = "/";
+                },
+                recordDataCallback: () => {
+                },
+            });
+        }).catch(function(err) {
+            console.log(err);
+        });
+    }
+</script>
+</body>
+</html>

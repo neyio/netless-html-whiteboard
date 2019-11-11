@@ -5,8 +5,75 @@ body {
     font-family: MarkPro, -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Roboto, Arial, HYQiHei, "PingFang SC", "PingFang TC", sans-serif;
 }
 
-#whiteboard {
+.homepage-box {
     width: 100%;
     height: 100vh;
-    background-color: ghostwhite;
+    display: flex;
+    flex-direction: row;
+}
+
+.logo {
+    cursor: pointer;
+    position: absolute;
+    margin-left: 48px;
+    margin-top: 48px;
+}
+
+.homepage-left {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homepage-right {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: url("./image/name_bg.jpg") no-repeat scroll center center;
+}
+
+.page-input-left-mid-box {
+    width: 360px;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 16px #E7EAEE;
+    flex-direction: column;
+}
+
+.page-input {
+    outline: 0;
+    width: 238px;
+    height: 38px;
+    border-radius: 4px;
+    background:none;
+    outline:none;
+    border: 1px solid #d9d9d9;
+    font-size: 16px;
+    margin-left: 12px;
+    margin-right: 12px;
+    text-align: center;
+}
+
+.page-btn {
+    outline: 0;
+    width: 240px;
+    height: 40px;
+    background-color: #5B908E;
+    color: white;
+    margin-top: 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }

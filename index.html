@@ -3,13 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Netless</title>
-    <link rel="stylesheet" href="https://sdk.herewhite.com/white-web-sdk/2.2.6.css">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div id="whiteboard">
+<div class="homepage-box">
+    <img class="logo" src="./image/netless_black.svg"/>
+    <div class="homepage-left">
+        <div class="page-input-left-mid-box">
+            <input id="page-input" class="page-input" placeholder="输入课堂名称">
+            <button onclick="createRoom()" class="page-btn">
+                创建白板房间
+            </button>
+        </div>
+    </div>
+    <div class="homepage-right">
+    </div>
 </div>
-<script src="https://sdk.herewhite.com/white-web-sdk/2.2.6.js"></script>
-<script src="index.js"></script>
+<script>
+    function createRoom() {
+        let url;
+        let name = document.getElementById("page-input").value;
+        if (name) {
+            url = `whiteboard?identity=host&classRoomName=${name}`;
+        } else {
+            url = `whiteboard?identity=host`;
+        }
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>
