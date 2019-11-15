@@ -45,10 +45,12 @@
     var state = {title:'',url: window.location.href};
     if (getQueryVariable("uuid")) {
         let uuid = getQueryVariable("uuid");
-        if (classRoomName) {
-            history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${uuid}&userId=${userId}`);
-        } else {
-            history.pushState(state,'',`whiteboard?identity=host&uuid=${uuid}&userId=${userId}`);
+        if (location.host) {
+            if (classRoomName) {
+                history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${uuid}&userId=${userId}`);
+            } else {
+                history.pushState(state,'',`whiteboard?identity=host&uuid=${uuid}&userId=${userId}`);
+            }
         }
         let url2 = 'https://cloudcapiv4.herewhite.com/room/join?token=' + sdkToken + '&uuid=' + uuid;
         let requestInit2 = {
@@ -87,10 +89,12 @@
             // Step1: 服务器返回房间唯一标识 uuid 和 进入房间的秘钥 roomToken
             return response.json();
         }).then(function(json) {
-            if (classRoomName) {
-                history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
-            } else {
-                history.pushState(state,'',`whiteboard?identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
+            if (location.host) {
+                if (classRoomName) {
+                    history.pushState(state,'',`whiteboard?classRoomName=${classRoomName}&identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
+                } else {
+                    history.pushState(state,'',`whiteboard?identity=host&uuid=${json.msg.room.uuid}&userId=${userId}`);
+                }
             }
             netlessRoom = window.WhiteFastSDK.Room("netless-whiteboard",{
                 uuid: json.msg.room.uuid,

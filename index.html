@@ -23,10 +23,13 @@
     function createRoom() {
         let url;
         let name = document.getElementById("page-input").value;
+        alert(window.location);
+        const host = `${window.location}`.replace("index.html", "");
+        alert(host);
         if (name) {
-            url = `whiteboard?identity=host&classRoomName=${name}`;
+            url = `${host}whiteboard.html?identity=host&classRoomName=${name}`;
         } else {
-            url = `whiteboard?identity=host`;
+            url = `${host}whiteboard.html?identity=host`;
         }
         window.location.href = url;
     }
